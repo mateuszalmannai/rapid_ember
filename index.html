@@ -29,7 +29,11 @@
 <script type="text/x-handlebars" data-template-name="walks">
   {{#link-to "walks.add"}}Add Walk{{/link-to}}
   {{#if content.length}}
-  <p>There are some walks</p>
+    <ul>
+      {{#each}}
+        <li>{{#link-to "walks.walk" this}}Walks {{this.id}}{{/link-to}}</li>
+      {{/each}}
+    </ul>
   {{else}}
   <p>There are no walks!</p>
   {{/if}}
@@ -46,6 +50,19 @@
   {{input type="text" id="minutesTaken" value=minutesTaken placeHolder="Time Taken"}}
   {{input type="text" id="mood" value=mood placeHolder="Good / OK / Bad"}}
   <button id="add-button" {{action "addWalk"}}>Add</button>
+</script>
+
+<script type="text/x-handlebars" data-template-name="walks/walk">
+  <h3>Walk Details</h3>
+
+  <ul>
+    <li>Walk: {{id}}</li>
+    <li>Date Walked: {{dateWalked}}</li>
+    <li>Distance Walked: {{distanceWalked}}</li>
+    <li>Time Taken: {{minutesTaken}}</li>
+    <li>Mood: {{mood}}</li>
+    <li>Speed: {{kmPerHour}}km/h</li>
+  </ul>
 </script>
 </body>
 </html>

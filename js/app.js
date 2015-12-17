@@ -4,11 +4,18 @@ App.ApplicationAdapter = DS.LSAdapter.extend({
   namespace: 'exermatic-data'
 });
 
+// Model
 App.Walk = DS.Model.extend({
   dateWalked: DS.attr('date'),
   distanceWalked: DS.attr('number'),
   minutesTaken: DS.attr('number'),
-  mood: DS.attr('string')
+  mood: DS.attr('string'),
+
+  // divide distance by time and convert to hours
+  kmPerHour: function(){
+    return 60 * this.get('distanceWalked') / this.get('minutesTaken');
+  }.property('distanceWalked', 'minutesTaken')
+
 });
 
 /*
