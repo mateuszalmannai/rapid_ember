@@ -92,7 +92,10 @@
     <li><span>Date Walked</span> {{dateWalked}}</li>
     <li><span>Distance Walked</span> {{twoDecimalPlaces distanceWalked}}</li>
     <li><span>Time Taken</span> {{twoDecimalPlaces minutesTaken}}</li>
-    <li><span>Mood</span> {{mood}}</li>
+    <li><span>Mood</span> <img {{bind-attr src="moodImage"}} width="48" height="48" alt="My Mood">
+      <div {{bind-attr class=":mood isGood:is-good:is-not-good"}}>{{mood}}</div>
+    </li>
+
     <li><span>Speed</span> {{twoDecimalPlaces kmPerHour}}kph</li>
   </ul>
 </script>

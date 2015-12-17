@@ -14,8 +14,26 @@ App.Walk = DS.Model.extend({
   // divide distance by time and convert to hours
   kmPerHour: function(){
     return 60 * this.get('distanceWalked') / this.get('minutesTaken');
-  }.property('distanceWalked', 'minutesTaken')
-
+  }.property('distanceWalked', 'minutesTaken'),
+  moodImage: function(){
+    var mood = this.get('mood');
+    switch (mood) {
+      case "good":
+        return "img/good.png"
+      break;
+      case "bad":
+        return "img/bad.png"
+      break;
+      case "ok":
+        return "img/ok.png"
+      break;
+      default:
+        return "img/unknown.png"
+    }
+  }.property('mood'),
+  isGood: function(){
+    return this.get('mood') == 'good';
+  }.property('mood')
 });
 
 /*
