@@ -166,6 +166,27 @@ App.SummaryController = Ember.ArrayController.extend({
   }.property('content.@each.kmPerHour')
 });
 
+/*
+  Not that the name of the component is the camel-case equivalent
+  of the template name mood-picker with the word component at the end
+*/
+App.MoodPickerComponent = Ember.Component.extend({
+  didInsertElement: function(){
+    this.set("value", "good");
+  },
+  isGood: function(){
+    return this.get('value') == 'good';
+  }.property('value'),
+  isOk: function(){
+    return this.get('value') == 'ok';
+  }.property('value'),
+  isBad: function(){
+    return this.get('value') == 'bad';
+  }.property('value'),
+  setMood: function(mood) {
+    this.set('value', mood);
+  }
+});
 
 /*
  - this code registers a new bound helper to Handlebars

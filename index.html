@@ -80,7 +80,7 @@
 
     <label for="new-mood">Mood When Walking</label>
     {{input type="text" id="new-mood" value=newMood placeholder="Good / OK / Bad"}}
-
+    {{mood-picker value=mood}}
     <button id="add-button" {{action "addWalk"}}>Add</button>
   </div>
 </script>
@@ -121,5 +121,12 @@
   </div>
 
 </script>
+
+<script type="text/x-handlebars" data-template-name="components/mood-picker">
+  <button {{action "setMood" "good"}} {{bind-attr class=":mood-button isGood:selected"}}>good</button>
+  <button {{action "setMood" "ok"}} {{bind-attr class=":mood-button isOk:selected"}}>ok</button>
+  <button {{action "setMood" "bad"}} {{bind-attr class=":mood-button isBad:selected"}}>bad</button>
+</script>
+
 </body>
 </html>
