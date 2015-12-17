@@ -12,28 +12,38 @@ App.Walk = DS.Model.extend({
   mood: DS.attr('string'),
 
   // divide distance by time and convert to hours
-  kmPerHour: function(){
+  kmPerHour: function () {
     return 60 * this.get('distanceWalked') / this.get('minutesTaken');
   }.property('distanceWalked', 'minutesTaken'),
-  moodImage: function(){
+  moodImage: function () {
     var mood = this.get('mood');
     switch (mood) {
       case "good":
         return "img/good.png"
-      break;
+        break;
       case "bad":
         return "img/bad.png"
-      break;
+        break;
       case "ok":
         return "img/ok.png"
-      break;
+        break;
       default:
         return "img/unknown.png"
     }
   }.property('mood'),
-  isGood: function(){
+  isGood: function () {
     return this.get('mood') == 'good';
-  }.property('mood')
+  }.property('mood'),
+  averageGood: function () {
+    var data = this.get('content').filterBy('mood', 'good');
+    return this.averageSpeed(data);
+  }.property('content.@each.kmPerHour'),
+  proportionGood: function () {
+    var content = this.get('content'),
+      allCount = content.get('length'),
+      goodCount = content.filterBy('mood', 'good').get('length');
+    return (100 * goodCount / allCount).toFixed(0) + "%";
+  }.property('content.@each.mood')
 });
 
 /*
@@ -44,9 +54,10 @@ App.Walk = DS.Model.extend({
  */
 App.Router.map(function () {
   this.resource('walks', function () {
-    this.route('add');
     this.route('walk', {path: '/:id'});
+    this.route('add', {path: 'add'});
   });
+  this.route('summary');
 });
 
 /*
@@ -133,14 +144,37 @@ App.WalksAddController = Ember.ObjectController.extend({
   }
 });
 
+
+App.SummaryRoute = Ember.Route.extend({
+  model: function () {
+    return this.store.find('walk');
+  }
+});
+
+
+App.SummaryController = Ember.ArrayController.extend({
+  averageSpeed: function (data) {
+    var length = data.get('length'),
+      sum = 0;
+    return (data.reduce(function (previous, item) {
+      return previous + item.get('kmsPerHour');
+    }, sum) / length).toFixed(2);
+  },
+  averageAll: function () {
+    var data = this.get('content');
+    return this.averageSpeed(data);
+  }.property('content.@each.kmPerHour')
+});
+
+
 /*
-  - this code registers a new bound helper to Handlebars
-  - the 'bound' part of the name indicates we can use it to link data to the UI
-  - we've called the helper 'humandDate' and then provide a function which simply
-    uses moment.js to format the date
-    - the function argument is the variable supplied to the template tag
-    - and we return what we want to see in the browser
-*/
+ - this code registers a new bound helper to Handlebars
+ - the 'bound' part of the name indicates we can use it to link data to the UI
+ - we've called the helper 'humandDate' and then provide a function which simply
+ uses moment.js to format the date
+ - the function argument is the variable supplied to the template tag
+ - and we return what we want to see in the browser
+ */
 Ember.Handlebars.registerBoundHelper("humanDate", function (input) {
   return moment(input).fromNow();
 });
