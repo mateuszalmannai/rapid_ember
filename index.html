@@ -17,9 +17,21 @@
 </head>
 <body>
 
+<!-- Using default empty template created by Ember for the 'walks' route -->
 <script type="text/x-handlebars">
     <h1>Exermatic</h1>
     {{outlet}}
+</script>
+
+<!-- Specify custom template -->
+<script type="text/x-handlebars" data-template-name="walks">
+  {{#if content.length}}
+    <p>There are some walks</p>
+  {{else}}
+    <p>There are no walks!</p>
+  {{/if}}
+
+  {{outlet}}
 </script>
 
 </body>
