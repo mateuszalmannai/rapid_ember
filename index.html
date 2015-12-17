@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <title>Exermatic</title>
 
+  <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
   <link rel="stylesheet" href="css/main.css">
 
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -13,6 +14,8 @@
           src="http://cdnjs.cloudflare.com/ajax/libs/ember-data.js/1.0.0-beta.8/ember-data.js"></script>
   <script type="text/javascript"
           src="http://cdnjs.cloudflare.com/ajax/libs/ember-localstorage-adapter/0.3.1/localstorage_adapter.js"></script>
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
+
 
   <script type="text/javascript" src="js/app.js"></script>
 
@@ -21,48 +24,78 @@
 
 <!-- Using default empty template created by Ember for the 'walks' route -->
 <script type="text/x-handlebars">
-  <h1>Exermatic</h1>
-  {{outlet}}
+  <div class="pure-g  main-container">
+    <div class="pure-u-1 header">
+      <h1>Exermatic</h1>
+    </div>
+    {{outlet}}
+  </div>
 </script>
+
 
 <!-- Specify custom template -->
 <script type="text/x-handlebars" data-template-name="walks">
-  {{#link-to "walks.add"}}Add Walk{{/link-to}}
-  {{#if content.length}}
-    <ul>
-      {{#each}}
-        <li>{{#link-to "walks.walk" this}}Walks {{this.id}}{{/link-to}}</li>
+  <div class="pure-u-1 menu">
+    {{#link-to "walks.add"}}+ Add Walk{{/link-to}}
+  </div>
+
+  <div class="pure-u-2-5">
+    {{#if content.length}}
+    <ul class="walk-list">
+      {{#each content}}
+      <li class="walk-header">
+        {{#link-to "walks.walk" this}}{{humanDate this.dateWalked}}{{/link-to}}
+        <span>{{twoDecimalPlaces this.distanceWalked}}km @ {{twoDecimalPlaces this.kmPerHour}}</span>
+      </li>
       {{/each}}
     </ul>
-  {{else}}
-  <p>There are no walks!</p>
-  {{/if}}
+    {{else}}
+    <p>There are no walks!</p>
+    {{/if}}
+  </div>
 
-  {{outlet}}
+  <div class="pure-u-3-5">
+    {{outlet}}
+  </div>
 </script>
 
 
 <!-- Template makes use of handlebars input tag -->
 <script type="text/x-handlebars" data-template-name="walks/add">
-  {{error}}
-  {{input type="text" id="dateWalked" value=dateWalked placeHolder="YYYY-MM-DD HH:mm"}}
-  {{input type="text" id="distanceWalked" value=distanceWalked placeHolder="Distance Walked"}}
-  {{input type="text" id="minutesTaken" value=minutesTaken placeHolder="Time Taken"}}
-  {{input type="text" id="mood" value=mood placeHolder="Good / OK / Bad"}}
-  <button id="add-button" {{action "addWalk"}}>Add</button>
+  <div class="add-walk-form">
+
+    <h3>Create a new walk</h3>
+
+    <div class="form-error">{{error}}</div>
+
+    <label for="new-date">Date Walked</label>
+    {{input type="text" id="new-date" value=newDate placeholder="YYYY-MM-DDTHH:mm:ss"}}
+
+    <label for="new-distance">Distance Walked</label>
+    {{input type="text" id="new-distance" value=newDistance placeholder="Distance Walked"}}
+
+    <label for="new-time">Time Taken (minutes)</label>
+    {{input type="text" id="new-time" value=newTime placeholder="Time Taken"}}
+
+    <label for="new-mood">Mood When Walking</label>
+    {{input type="text" id="new-mood" value=newMood placeholder="Good / OK / Bad"}}
+
+    <button id="add-button" {{action "addWalk"}}>Add</button>
+  </div>
 </script>
 
 <script type="text/x-handlebars" data-template-name="walks/walk">
   <h3>Walk Details</h3>
 
-  <ul>
-    <li>Walk: {{id}}</li>
-    <li>Date Walked: {{dateWalked}}</li>
-    <li>Distance Walked: {{distanceWalked}}</li>
-    <li>Time Taken: {{minutesTaken}}</li>
-    <li>Mood: {{mood}}</li>
-    <li>Speed: {{kmPerHour}}km/h</li>
+  <ul class="walk-details">
+    <li><span>Walk</span> {{id}}</li>
+    <li><span>Date Walked</span> {{dateWalked}}</li>
+    <li><span>Distance Walked</span> {{twoDecimalPlaces distanceWalked}}</li>
+    <li><span>Time Taken</span> {{twoDecimalPlaces minutesTaken}}</li>
+    <li><span>Mood</span> {{mood}}</li>
+    <li><span>Speed</span> {{twoDecimalPlaces kmPerHour}}kph</li>
   </ul>
 </script>
+
 </body>
 </html>

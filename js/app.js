@@ -113,5 +113,27 @@ App.WalksAddController = Ember.ObjectController.extend({
       this.transitionToRoute('walks.walk', walk);
     }
   }
-})
-;
+});
+
+/*
+  - this code registers a new bound helper to Handlebars
+  - the 'bound' part of the name indicates we can use it to link data to the UI
+  - we've called the helper 'humandDate' and then provide a function which simply
+    uses moment.js to format the date
+    - the function argument is the variable supplied to the template tag
+    - and we return what we want to see in the browser
+*/
+Ember.Handlebars.registerBoundHelper("humanDate", function (input) {
+  return moment(input).fromNow();
+});
+
+Ember.Handlebars.registerBoundHelper("strikeOut", function (input) {
+  var escaped = Handlebars.Utils.escapeExpression(input);
+  return new Ember.Handlebars.SafeString('<del>' + escaped + '</del>')
+});
+
+Ember.Handlebars.registerBoundHelper("twoDecimalPlaces", function (input) {
+  if (typeof(input) === 'undefined' || typeof(input) !== 'number')
+    return "0.00";
+  return input.toFixed(2);
+});
