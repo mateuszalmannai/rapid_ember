@@ -10,6 +10,7 @@ App.Walk = DS.Model.extend({
   distanceWalked: DS.attr('number'),
   minutesTaken: DS.attr('number'),
   mood: DS.attr('string'),
+  journey: DS.belongsTo('journey'),
 
   // divide distance by time and convert to hours
   kmPerHour: function () {
@@ -46,6 +47,9 @@ App.Walk = DS.Model.extend({
   }.property('content.@each.mood')
 });
 
+App.Journey = DS.Model.extend({
+  walks: DS.hasMany('walk')
+});
 /*
  - Create a 'walks' route
  - Nest add route inside walks route, this way we keep our list
